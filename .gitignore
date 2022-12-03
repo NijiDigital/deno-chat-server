@@ -1,0 +1,7 @@
+.idea/
+.scannerwork/
+.vscode/
+dist/
+tmp/
+.envrc
+deno.lock
