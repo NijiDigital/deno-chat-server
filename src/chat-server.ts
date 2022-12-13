@@ -55,6 +55,18 @@ const handleConn = async (conn: Deno.Conn) => {
 const listener = Deno.listen({ port })
 console.log(`Chat server is listening to port ${port}…`)
 
+const watchdogChunk = new Uint8Array({ length: 1 })
+setInterval(() => {
+  connections.map(async (conn) => {
+    try {
+      await conn.write(watchdogChunk)
+    } catch {
+      destroyConn(conn)
+    }
+  })
+}, 100)
+console.log('Watch dog timer started')
+
 for await (const conn of listener) {
   connections.push(conn)
   void handleConn(conn)
